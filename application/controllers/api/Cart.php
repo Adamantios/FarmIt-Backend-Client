@@ -70,6 +70,7 @@ class Cart extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
+        $this->load->model('Cart_model');
         $cart = $this->Cart_model->get_cart($user_id);
 
         if ($cart)
@@ -124,6 +125,7 @@ class Cart extends REST_Controller
             ], REST_Controller::HTTP_UNAUTHORIZED);
         }
 
+        $this->load->model('Cart_model');
         $success = $this->Cart_model->change_cart($user_id, $this->post('cart'));
 
         if ($success)
