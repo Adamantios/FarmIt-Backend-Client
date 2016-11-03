@@ -88,7 +88,7 @@ class Cart extends REST_Controller
 
     function change_cart_post()
     {
-        if (!$this->post('email') || !$this->post('token') || !$this->post('cart')) {
+        if (!$this->post('email') || !$this->post('token')) {
             $this->response([
                 'status' => FALSE,
                 'message' => 'You have not provided all the requested data!'
