@@ -11,7 +11,7 @@ class Cart_model extends CI_Model
 
     public function get_cart($user_id)
     {
-        return $this->db->get_where('cart', array('user_id' => $user_id));
+        return $this->db->get_where('cart', array('user_id' => $user_id))->result();
     }
 
     public function change_cart($user_id, $cart)
