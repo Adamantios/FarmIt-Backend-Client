@@ -51,4 +51,9 @@ class Cart_model extends CI_Model
 
         return TRUE;
     }
+
+    public function empty_cart($user_id)
+    {
+        return $this->db->delete('cart', array('user_id' => $user_id));
+    }
 }

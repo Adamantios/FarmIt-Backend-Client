@@ -139,4 +139,58 @@ class Cart extends REST_Controller
                 'message' => 'Cart has not been changed.'
             ], REST_Controller::HTTP_BAD_REQUEST);
     }
+
+    function empty_cart_post()
+    {
+        if (!$this->post('email') || !$this->post('token')) {
+            $this->response([
+                'status' => FALSE,
+                'message' => 'You have not provided all the requested data!'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+
+        $this->load->model('Users_model');
+        $user_id = $this->Users_model->get_user_id_by_email($this->post('email'));
+
+        if (!$user_id) {
+            $this->response([
+                'status' => FALSE,
+                'message' => 'User not found'
+            ], REST_Controller::HTTP_FORBIDDEN);
+        }
+
+        $this->load->model('Logged_users_model');
+        $returned_token = $this->Logged_users_model->getToken($user_id);
+
+        if (!$returned_token) {
+            $this->response([
+                'status' => FALSE,
+                'message' => 'Session not found.'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+
+        $token = $this->post('token');
+
+        // Check user's token
+        if ($token != $returned_token) {
+            $this->response([
+                'status' => FALSE,
+                'message' => 'Unauthorized action!'
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+
+        $this->load->model('Cart_model');
+        $success = $this->Cart_model->empty_cart($user_id);
+
+        if ($success)
+            $this->response([
+                'status' => TRUE,
+                'message' => 'Cart has been successfully emptied.',
+            ], REST_Controller::HTTP_OK);
+        else
+            $this->response([
+                'status' => FALSE,
+                'message' => 'Cart could not be emptied.'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+    }
 }
