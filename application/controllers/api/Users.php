@@ -201,7 +201,7 @@ class Users extends REST_Controller
             $this->response([
                 'status' => FALSE,
                 'message' => 'User not found'
-            ], REST_Controller::HTTP_FORBIDDEN);
+            ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
         $this->load->model('Logged_users_model');
